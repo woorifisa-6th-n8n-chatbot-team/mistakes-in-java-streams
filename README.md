@@ -39,6 +39,15 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
   - Lazy Evaluation과 Short-Circuit이 실행 횟수와 실행 시간에 미치는 영향을 비교한다.
   - 담당자: (HiLeeS)
 ![alt text](<스크린샷 2026-01-07 170619.png>)
+- **Case 3 - 일반 For문, Sequential Stream, Parallel Stream**
+  - Lazy Evaluation과 Short-Circuit이 실행 횟수와 실행 시간에 미치는 영향을 비교한다.
+  - 같은 양의 데이터를 처리하는 일반 For문과 Sequential Stream, Paraller Stream 실행 시간을 비교한다.
+  ========== 성능 분석 결과 ==========
+    For-loop      : 1493.4539 ms
+    Sequential    : 1322.5975 ms
+    Parallel      : 2260.0708 ms
+  ===================================
+  - 담당자: (cutterrabbit)
 
 ---
 
@@ -50,6 +59,7 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
 │   ├── ISSUE_TEMPLATE/
 │   └── pull_request_template.md
 ├── docs/
+│   ├── Stream.md
 │   ├── StreamAPITest.md
 │   ├── StreamAPITest.png
 │   ├── case1-no-terminal.md
