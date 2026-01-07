@@ -39,6 +39,12 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
   - Lazy Evaluation과 Short-Circuit 효과 검증
   - 담당자: (작성자)
 
+- **Case 3 - Terminal 연산 없는 Stream 실행 여부 검증**
+  - Terminal 연산이 붙어있지 않은 Stream이 실행되지 않음을 실행시간으로 검증한다.
+  - 담당자: (handgarden)
+  ![StreamAPITest](/docs/StreamAPITest.png)
+
+
 > 각 테스트 케이스의 상세 설명, 코드, 실행 결과는  
 > `docs/` 디렉토리 내 개별 md 파일에 정리합니다.
 
