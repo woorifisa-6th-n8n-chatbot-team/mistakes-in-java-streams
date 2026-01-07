@@ -31,16 +31,14 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
 
 ### 테스트 케이스 목록
 
-- **Test Case 1**
-  - 터미널 연산이 없는 Stream 실행 여부 검증
-  - 담당자: (작성자)
-
-- **Test Case 2**
-  - Lazy Evaluation과 Short-Circuit 효과 검증
-  - 담당자: (작성자)
-
-> 각 테스트 케이스의 상세 설명, 코드, 실행 결과는  
-> `docs/` 디렉토리 내 개별 md 파일에 정리합니다.
+- **Case 1 - 터미널 연산 없는 Stream 실행 여부 검증**
+  - 중간 연산만 정의된 Stream은 실제로 실행되지 않음을 코드로 검증한다.
+  - 담당자: (HiLeeS)
+![alt text](<스크린샷 2026-01-07 170556.png>)
+- **Case 2 - Lazy Evaluation으로 연산량 감소 검증**
+  - Lazy Evaluation과 Short-Circuit이 실행 횟수와 실행 시간에 미치는 영향을 비교한다.
+  - 담당자: (HiLeeS)
+![alt text](<스크린샷 2026-01-07 170619.png>)
 
 ---
 
