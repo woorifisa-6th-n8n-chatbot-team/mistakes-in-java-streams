@@ -96,6 +96,49 @@ public class Main {
         }
     }
 
+    static class CustomStream<T> {
+        private final CustomIterator<T> iter;
+
+        CustomStream(CustomIterator<T> iter) {
+            this.iter = iter;
+        }
+
+        // 중간 연산
+        public <R> CustomStream<R> map(CustomTransformer<T, R> transformer) {
+            CustomIterator<R> mappedIter = new CustomIterator<>(null) {
+
+                @Override
+                public boolean hasNext() {
+                    return iter.hasNext();
+                }
+
+                @Override
+                public R next() {
+                    T value = iter.next();
+                    return transformer.transform(value);
+                }
+            };
+
+            return new CustomStream<>(mappedIter);
+        }
+
+        public long count() {
+            long cnt = 0;
+            while (iter.hasNext()) {
+                iter.next();
+                cnt++;
+            }
+            return cnt;
+        }
+        
+        public void forEach(Consumer<T> consumer) {
+            while (iter.hasNext()) {
+                T value = (T) iter.next();
+                consumer.accept(value);
+            }
+        }
+    }
+
     static class CustomList<T> {
         private final CustomIterator<T> iterator;
 
@@ -121,8 +164,7 @@ public class Main {
                     return num * 2;
                 });
         System.out.println("Java Stream: Before terminal operation");
-        long javaCount = javaStream.count();
-        System.out.println("Java Stream: Count: " + javaCount);
+        javaStream.forEach(System.out::println);
 
         CustomList<Integer> customData = CustomList.asList(1, 2, 3, 4, 5);
         CustomStream<Integer> stream = customData.stream()
@@ -132,8 +174,7 @@ public class Main {
                 });
 
         System.out.println("CustomStream: Before terminal operation");
-        long count = stream.count();
-        System.out.println("CustomStream: Count: " + count);
+        stream.forEach(System.out::println);
     }
 }
 ```
@@ -141,7 +182,3 @@ public class Main {
 ### 결론
 
 - terminal 연산자를 만나는 경우에만 실제 람다가 호출되면서 작성한 로직들이 동작함
-
-### 관련 도서
-
-https://github.com/marpple/multi-paradigm-programming

@@ -61,6 +61,7 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
   - StreamAPI 구현 코드를 구현하고 실제 Stream의 동작과 비교한다.
   - [상세 문서 보기](https://github.com/woorifisa-6th-n8n-chatbot-team/mistakes-in-java-streams/blob/main/docs/StreamAPITest.md)
   - 담당자: (handgarden)
+![StreamAPI 실행 결과](./docs/StreamAPITest.png)
 
 ---
 
