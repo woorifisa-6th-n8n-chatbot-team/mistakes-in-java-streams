@@ -35,7 +35,7 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
   - 중간 연산만 정의된 Stream은 실제로 실행되지 않음을 코드로 검증한다.
   - [상세 문서 보기](https://github.com/woorifisa-6th-n8n-chatbot-team/mistakes-in-java-streams/blob/main/docs/case1-no-terminal.md)
   - 담당자: (HiLeeS)
-![alt text](<스크린샷 2026-01-07 170556.png)
+![alt text](./docs/case1-no-terminal.png)
 
 - **Case 2 - 일반 For문, Sequential Stream, Parallel Stream**
   - 같은 양의 데이터를 처리하는 일반 For문과 Sequential Stream, Paraller Stream 실행 시간을 비교한다.
