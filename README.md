@@ -39,6 +39,7 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
 
 - **Case 2 - 일반 For문, Sequential Stream, Parallel Stream**
   - 같은 양의 데이터를 처리하는 일반 For문과 Sequential Stream, Paraller Stream 실행 시간을 비교한다.
+  - 담당자: (cuterrabbit)
 <center>  
 
 | 측정 항목            | 실행 시간 (ms) |
@@ -49,7 +50,7 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
 
 </center>   
 
-   - 담당자: (cutterrabbit)
+   
 
 - **Case 3 - StreamAPI 구현 설명 및 실행 확인**
   - StreamAPI 구현 코드를 구현하고 실제 Stream의 동작과 비교한다.
