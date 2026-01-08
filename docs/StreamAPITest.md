@@ -1,176 +1,147 @@
 # 1. Not Using Terminal Operations:Mistake: Forgetting to call a terminal operation like collect(), forEach(), or reduce(), this leads to no execution.
 
-
 ## 실행 결과 및 결론
+
 ![StreamAPITest](StreamAPITest.png)
+
 - 위 결과를 보면 stream을 사용할 때 terminal operation을 호출하지 않으면 filter와 같은 연산 함수들이 실행되지 않는 것을 알 수 있다.
 
-## 이론 (GPT)
-**terminal operation(최종 연산)** 은 Stream 이해의 *마지막 퍼즐*입니다.
+## 이론
 
----
+- Terminal 연산을 실행했을 때만 stream에 체이닝해서 작성한 연산들이 실행되는 이유를 분석한다.
 
-### 한 문장 정의
+## 반복자 패턴
 
-> **Terminal operation은
-> Stream 파이프라인을 “실제로 실행”시키고,
-> 더 이상 Stream을 사용할 수 없게 만드는 연산이다.**
+- 순회하는 방법을 노출하지 않고 순회할 수 있도록 만들어주는 패턴
 
----
+## List는 이터러블(반복자 패턴) 구현체
 
-## Stream 전체 구조에서 위치
+- List 구현체는 아래와 같이 SequencedCollection을 상속
+  ![List](./List.png)
+- SequencedCollection은 Collection 상속
+  ![Collection](./SequencedCollection.png)
+- Collection은 Iterable 상속
+  ![Collection](./Collection.png)
 
-```java
-source -> intermediate operations -> terminal operation
-```
+>  List는 Iterable을 구현한 반복 가능한 객체이다.
 
-예:
-
-```java
-names.stream()          // source
-     .filter(...)       // intermediate (lazy)
-     .map(...)          // intermediate (lazy)
-     .forEach(...);     // terminal (🔥 실행 트리거)
-```
-
-`forEach`가 호출되는 순간:
-
-* 데이터 순회 시작
-* `filter`, `map`이 실제로 실행됨
-
----
-
-## Terminal Operation의 3가지 핵심 특징
-
-### 🔥 1️⃣ **실행을 트리거한다**
-
-* 그 전까지는 정의만 있음
-* 호출 순간에 **source부터 한 요소씩 pull**
+- Stream은 BaseStream 상속
+- ![Stream](./Stream.png)
+- BaseStream은 Iterator(Iterable을 가지고 있는 객체이면서 순회할 수 있음)를 필드로 가지고 있다.
+- ![BaseStream](./BaseStream.png)
+`List 데이터에 .stream()을 호출하면 순회할 수 있는 값들을 Stream 객체의 iterator 필드에 담은 후에 반환`
 
 ```java
-stream.filter(...); // 실행 ❌
-stream.count();     // 실행 ⭕
+
+import java.util.stream.Stream;
+
+
+public class Main {
+
+    static class CustomIterator<T> {
+        private final T[] data;
+        private int index = 0;
+
+        CustomIterator(T[] data) {
+            this.data = data;
+        }
+
+        public boolean hasNext() {
+            return index < data.length;
+        }
+
+        public T next() {
+            return data[index++];
+        }
+    }
+
+    @FunctionalInterface
+    interface CustomTransformer<T, R> {
+        R transform(T input);
+    }
+
+    static class CustomStream<T> {
+        private final CustomIterator<T> iter;
+
+        CustomStream(CustomIterator<T> iter) {
+            this.iter = iter;
+        }
+
+        // 중간 연산
+        public <R> CustomStream<R> map(CustomTransformer<T, R> transformer) {
+            CustomIterator<R> mappedIter = new CustomIterator<>(null) {
+
+                @Override
+                public boolean hasNext() {
+                    return iter.hasNext();
+                }
+
+                @Override
+                public R next() {
+                    T value = iter.next();
+                    return transformer.transform(value);
+                }
+            };
+
+            return new CustomStream<>(mappedIter);
+        }
+
+        public long count() {
+            long cnt = 0;
+            while (iter.hasNext()) {
+                iter.next();
+                cnt++;
+            }
+            return cnt;
+        }
+    }
+
+    static class CustomList<T> {
+        private final CustomIterator<T> iterator;
+
+        private CustomList(CustomIterator<T> iterator) {
+            this.iterator = iterator;
+        }
+
+        public static <T> CustomList<T> asList(T ... data) {
+            CustomIterator<T> iterator = new CustomIterator<>(data);
+            return new CustomList<>(iterator);
+        }
+
+        public CustomStream<T> stream() {
+            return new CustomStream<>(this.iterator);
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+        Stream<Integer> javaStream = data.stream()
+                .map(num -> {
+                    System.out.println("Lambda executed for: " + num);
+                    return num * 2;
+                });
+        System.out.println("Java Stream: Before terminal operation");
+        long javaCount = javaStream.count();
+        System.out.println("Java Stream: Count: " + javaCount);
+
+        CustomList<Integer> customData = CustomList.asList(1, 2, 3, 4, 5);
+        CustomStream<Integer> stream = customData.stream()
+                .map(num -> {
+                    System.out.println("Lambda executed for: " + num);
+                    return num * 2;
+                });
+
+        System.out.println("CustomStream: Before terminal operation");
+        long count = stream.count();
+        System.out.println("CustomStream: Count: " + count);
+    }
+}
 ```
 
----
+### 결론
 
-### 🔥 2️⃣ **Stream을 소비한다 (재사용 불가)**
+- terminal 연산자를 만나는 경우에만 실제 람다가 호출되면서 작성한 로직들이 동작함
 
-```java
-Stream<String> s = names.stream();
-s.forEach(System.out::println);
-s.count(); // ❌ IllegalStateException
-```
+### 관련 도서
 
-> “stream has already been operated upon or closed”
-
-왜?
-
-* 내부 iterator를 소모했기 때문
-
----
-
-### 🔥 3️⃣ **Stream이 아닌 결과를 반환한다**
-
-(또는 `void`)
-
-| 반환 타입         | 의미                 |
-| ------------- | ------------------ |
-| `void`        | 완전 소비 (`forEach`)  |
-| `boolean`     | 조건 검사 (`anyMatch`) |
-| `Optional<T>` | 일부 값               |
-| `long`        | 집계                 |
-| `List<T>` 등   | 컬렉션                |
-
-👉 **Stream을 리턴하는 terminal은 없다**
-
----
-
-## 대표적인 Terminal Operation 분류
-
-### 1️⃣ 반복 / 소비
-
-```java
-forEach
-forEachOrdered
-```
-
----
-
-### 2️⃣ 집계 (Aggregation)
-
-```java
-count
-min
-max
-reduce
-```
-
----
-
-### 3️⃣ 수집 (Collect)
-
-```java
-collect(Collectors.toList())
-collect(Collectors.groupingBy(...))
-```
-
----
-
-### 4️⃣ 탐색 / 단락(short-circuit)
-
-```java
-findFirst
-findAny
-anyMatch
-allMatch
-noneMatch
-```
-
-👉 **조건 만족 시 바로 종료**
-(지연 연산의 장점)
-
----
-
-## 실행 흐름 예제로 감 잡기
-
-```java
-names.stream()
-     .filter(n -> {
-         System.out.println("filter " + n);
-         return n.startsWith("A");
-     })
-     .map(n -> {
-         System.out.println("map " + n);
-         return n.toUpperCase();
-     })
-     .findFirst();
-```
-
-출력:
-
-```
-filter Alice
-map Alice
-```
-
-* Bob, Charlie는 아예 안 봄
-* 이유: `findFirst`가 **terminal + short-circuit**
-
----
-
-## 왜 terminal이 반드시 하나여야 할까?
-
-Stream은:
-
-* 내부 반복
-* 상태 없는 파이프라인
-* 한 방향 흐름
-
-따라서:
-
-* **실행은 단 한 번**
-* **결과는 한 번만 소비**
-
-➡ 명령형 for-loop랑 근본적으로 다름
-
+https://github.com/marpple/multi-paradigm-programming
