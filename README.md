@@ -35,20 +35,23 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
   - 중간 연산만 정의된 Stream은 실제로 실행되지 않음을 코드로 검증한다.
   - [상세 문서 보기](https://github.com/woorifisa-6th-n8n-chatbot-team/mistakes-in-java-streams/blob/main/docs/case1-no-terminal.md)
   - 담당자: (HiLeeS)
-![alt text](<스크린샷 2026-01-07 170556.png)
+![alt text](./docs/case1-no-terminal.png)
 
 - **Case 2 - 일반 For문, Sequential Stream, Parallel Stream**
   - 같은 양의 데이터를 처리하는 일반 For문과 Sequential Stream, Paraller Stream 실행 시간을 비교한다.
-<center>
-| 측정 항목 | 실행 시간 (ms) |
+  - 담당자: (cuterrabbit)
 
-| **For-loop** | 1493.4539 ms |
+<center>  
 
-| **Sequential Stream** | 1322.5975 ms |
+| 측정 항목            | 실행 시간 (ms) |
+|---------------------|---------------|
+| **For-loop**            | 1493.4539     |
+| **Sequential Stream**   | 1322.5975     |
+| **Parallel Stream**     | 2260.0708     |
 
-| **Parallel Stream** | 2260.0708 ms |
-</center>
-  - 담당자: (cutterrabbit)
+</center>   
+
+   
 
 - **Case 3 - StreamAPI 구현 설명 및 실행 확인**
   - StreamAPI 구현 코드를 구현하고 실제 Stream의 동작과 비교한다.
