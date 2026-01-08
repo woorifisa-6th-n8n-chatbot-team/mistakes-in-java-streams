@@ -49,7 +49,7 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
 
 </center>   
 
- - 담당자: (cutterrabbit)
+   - 담당자: (cutterrabbit)
 
 - **Case 3 - StreamAPI 구현 설명 및 실행 확인**
   - StreamAPI 구현 코드를 구현하고 실제 Stream의 동작과 비교한다.
