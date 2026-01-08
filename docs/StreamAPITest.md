@@ -20,14 +20,16 @@
   ![List](./List.png)
 - SequencedCollection은 Collection 상속
   ![Collection](./SequencedCollection.png)
-- Collection은 Iterable 구현체
+- Collection은 Iterable 상속
   ![Collection](./Collection.png)
-  = List는 Iterable을 구현한 반복 가능한 객체이다.
-- Stream은 BaseStream 구현체
+
+>  List는 Iterable을 구현한 반복 가능한 객체이다.
+
+- Stream은 BaseStream 상속
 - ![Stream](./Stream.png)
 - BaseStream은 Iterator(Iterable을 가지고 있는 객체이면서 순회할 수 있음)를 필드로 가지고 있다.
 - ![BaseStream](./BaseStream.png)
-  = List 데이터에 .stream()을 호출하면 해당 Iterable을 가진 Iterator를 Stream 객체의 iterator 필드에 담은 후에 반환
+`List 데이터에 .stream()을 호출하면 순회할 수 있는 값들을 Stream 객체의 iterator 필드에 담은 후에 반환`
 
 ```java
 
