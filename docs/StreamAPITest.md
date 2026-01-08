@@ -4,17 +4,11 @@
 
 ![StreamAPITest](StreamAPITest.png)
 
-- 위 결과를 보면 stream을 사용할 때 terminal operation을 호출하지 않으면 filter와 같은 연산 함수들이 실행되지 않는 것을 알 수 있다.
+- 위 결과를 보면 Stream을 사용할 때 중간 연산자는 종단 연산자를 호출하는 시점에 실행된다.
 
 ## 이론
 
-- Terminal 연산을 실행했을 때만 stream에 체이닝해서 작성한 연산들이 실행되는 이유를 분석한다.
-
-## 반복자 패턴
-
-- 순회하는 방법을 노출하지 않고 순회할 수 있도록 만들어주는 패턴
-
-## List는 이터러블(반복자 패턴) 구현체
+- 코드를 구현하면서 종단 연산자를 실행했을 때만 중간 연산자들이 실행되는 이유를 분석한다.
 
 - List 구현체는 아래와 같이 SequencedCollection을 상속
   ![List](./List.png)
@@ -29,7 +23,6 @@
 - ![Stream](./Stream.png)
 - BaseStream은 Iterator(Iterable을 가지고 있는 객체이면서 순회할 수 있음)를 필드로 가지고 있다.
 - ![BaseStream](./BaseStream.png)
-`List 데이터에 .stream()을 호출하면 순회할 수 있는 값들을 Stream 객체의 iterator 필드에 담은 후에 반환`
 
 ```java
 
@@ -181,4 +174,4 @@ public class Main {
 
 ### 결론
 
-- terminal 연산자를 만나는 경우에만 실제 람다가 호출되면서 작성한 로직들이 동작함
+- 종단 연산자를 호출하는 경우에만 실제 이터레이터를 순회하면서 값에 중간 연산자를 적용하기 때문에 스트림을 쓸 때에는 종단 연산자를 꼭 사용하자. 
