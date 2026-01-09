@@ -44,7 +44,7 @@ Java Stream API를 사용하면서 자주 발생하는 **실수(Mistakes)**를 �
 <center>
 | 측정 항목 | 실행 시간 (ms) |
 =======
-  - 담당자: (cuterrabbit)
+  - 담당자: (cuterabbit)
 >>>>>>> origin/main
 
 <center>  
